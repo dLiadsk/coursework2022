@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+
+    <meta charset="UTF-8">
+    <title>Створення лота</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"
+          integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+
+</head>
+<body>
+<div th:insert="~{parts::header}"></div>
+<div class="text-bg-secondary p-3">
+    <div class="container col-xl-10 col-xxl-8 px-4 py-5">
+        <div class="row align-items-center g-lg-5 py-5">
+            <div class="col-md-10 mx-auto col-lg-10">
+                <form class="p-4 p-md-5 border rounded-3 bg-body-tertiary text-bg-dark p-3  text-dark"
+                      action="/lot/create" method="post" enctype="multipart/form-data">
+                    <div class="text-white"></div>
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control" id="titleOfLot" placeholder="Назва лота"
+                               name="titleOfLot">
+                        <label for="titleOfLot">Назва лота</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control" id="description" placeholder="Опис лота"
+                               name="description">
+                        <label for="description">Опис лота</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input type="number" class="form-control" id="firstRate" placeholder="Початкова ставка"
+                               name="firstRate">
+                        <label for="firstRate">Початкова ставка</label>
+                    </div>
+                    <div class="text-white">
+                        Додати фото до лота:
+                        <div class="form-floating mb-3" style="padding-left: 50px">
+                            <input type="file" id="file1" placeholder="Photo1" name="file1">
+                        </div>
+                        <div class="form-floating mb-3" style="padding-left: 50px">
+                            <input type="file" id="file2" placeholder="Photo2" name="file2">
+                        </div>
+                        <div class="form-floating mb-3" style="padding-left: 50px">
+                            <input type="file" id="file3" placeholder="Photo3" name="file3">
+                        </div>
+                    </div>
+                    <button class="w-100 btn btn-lg btn-primary" type="submit">Створити лот</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div th:insert="~{parts::footer}"></div>
+
+</body>
+</html>
