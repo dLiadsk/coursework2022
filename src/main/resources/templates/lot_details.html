@@ -20,15 +20,13 @@
         <strong th:text="${success}"></strong>
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
-    <div class="container mt-5" style="padding-left: 250px">
+    <div class="container mt-5" style="padding-left: 250px; padding-right: 250px">
 
         <h3 th:text="${lot.getTitleOfLot()}"></h3>
-        <div th:each="img : ${lot.getImageList()}">
-            <figure class="figure">
-                <img th:src="@{'/images/' + ${img.id}}" class="figure-img img-fluid rounded" alt="" width="700px"
-                     height="100%">
-            </figure>
-        </div>
+        <figure class="figure">
+            <img th:src="@{'/img/img.png'}" class="figure-img img-fluid rounded" alt="" width="700px"
+                 height="100%">
+        </figure>
         <h5 th:text="'Опис лота: ' + ${lot.getDescription()}"></h5>
         <h5 th:text="'Поточна ставка: ' + ${lot.getRate()} + ' грн.'"></h5>
         <div>
@@ -58,20 +56,27 @@
             }
         </script>
         <form th:if="${#authorization.expression('isAuthenticated()')} and ${lot.getUser().getUserId() != user.getUserId()} and ${lot.isActive()}"
-              th:action="'/lot/makeRate/' + ${lot.getIdOfLot()}" method="post">
+              th:action="'/lot/makeRate'" method="post">
+            <input type="hidden" th:value="${lot.getIdOfLot()}" name="id">
             <input type="number" th:value="${lot.getRate()}" name="newRate">
             <input type="hidden" th:value="${user.getUserId()}" name="idOfWinner">
             <button type="submit" class="btn btn-primary d-inline-flex align-items-center">Зробити ставку</button>
         </form>
+        <h5 th:unless="${lot.isActive()}" th:text="'Лот неактивний'"></h5>
         <div th:if="${lot.getUser().getUserId() == user.getUserId()}">
-            &nbsp;<a th:href="'/lot/edit/' + ${lot.getIdOfLot()}"
-                     class="btn btn-primary d-inline-flex align-items-center">Редагувати</a>
-            &nbsp;&nbsp;<a th:if="${lot.isActive()}" th:href="'/lot/activity/' + ${lot.getIdOfLot()}"
-                           class="btn btn-primary d-inline-flex align-items-center">Зупинити торги</a>
-            <a th:if="${not lot.isActive()}" th:href="'/lot/activity/' + ${lot.getIdOfLot()}"
-               class="btn btn-primary d-inline-flex align-items-center">Почати торги</a>
-            &nbsp;&nbsp;&nbsp;<a th:href="'/lot/delete/' + ${lot.getIdOfLot()}"
-                                 class="btn btn-primary d-inline-flex align-items-center">Видалити лот</a>
+            <form action="/lot/edit">
+                <input type="hidden" th:value="${lot.getIdOfLot()}" name="id">
+                <button type="submit" class="btn btn-primary d-inline-flex align-items-center">Редагувати</button>
+            </form><br>
+            <form action="/lot/activity" method="post">
+                <input type="hidden" th:value="${lot.getIdOfLot()}" name="id">
+                <button th:if="${lot.isActive()}" type="submit" class="btn btn-primary d-inline-flex align-items-center">Зупинити торги</button>
+                <button th:unless="${lot.isActive()}" type="submit" class="btn btn-primary d-inline-flex align-items-center">Почати торги</button>
+            </form><br>
+            <form action="/lot/delete" method="post">
+                <input type="hidden" th:value="${lot.getIdOfLot()}" name="id">
+                <button type="submit" class="btn btn-primary d-inline-flex align-items-center">Видалити лот</button>
+            </form>
         </div>
         <br>
         <h6 th:text="'Дата створення лота: ' + ${lot.getDateAndTimeOfCreation().toLocalDate()}"></h6><br><br><br>

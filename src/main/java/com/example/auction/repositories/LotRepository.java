@@ -12,4 +12,6 @@ public interface LotRepository extends JpaRepository<Lot, Long> {
     List<Lot> findAllByUser(User user);
 
     List<Lot> findByDescriptionContainingIgnoreCaseAndActive(String keyword, boolean active);
+
+    List<Lot> findByTitleOfLotContainingIgnoreCaseAndActive(String keyword, boolean active);
 }

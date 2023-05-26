@@ -11,10 +11,7 @@
 <div class="text-bg-secondary p-3">
     <div class="container mt-5" style="padding-left: 250px">
         <figure class="figure">
-            <img th:if="${user.getAvatar() != null}" th:src="@{'/images/' + ${user.getAvatar().getId()}}"
-                 class="figure-img img-fluid rounded" alt="" width="700px"
-                 height="100%">
-            <img th:if="${user.getAvatar() == null}" th:src="@{'/img/user.png'}"
+            <img th:src="@{'/img/user.png'}"
                  class="figure-img img-fluid rounded" alt="" width="300px"
                  height="100%">
         </figure>

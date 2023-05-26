@@ -10,25 +10,25 @@
 <div th:insert="~{parts::header}"></div>
 <div class="text-bg-secondary p-3">
     <div class="container mt-5" style="padding-left: 250px">
-        <form th:action="'/lot/edit/' + ${lot.getIdOfLot()}" method="post">
+        <form th:action="'/lot/edit'" method="post">
             <h3 th:text="${lot.getTitleOfLot()}"></h3>
             <input type="text" th:value="${lot.getTitleOfLot()}" id="title" name="titleOfLot" placeholder="Title">
             <label for="title">Змінити заголовок</label>
-            <div th:each="img : ${lot.getImageList()}">
+            <div>
                 <figure class="figure">
-                    <img th:src="@{'/images/' + ${img.id}}" class="figure-img img-fluid rounded" alt="" width="700px"
+                    <img th:src="@{'/img/img.png'}" class="figure-img img-fluid rounded" alt="" width="700px"
                          height="100%">
                 </figure>
-                <br>
             </div>
             <h5 th:text="'Опис лоту: ' + ${lot.getDescription()}"></h5>
             <input type="text" th:value="${lot.getDescription()}" id="description" name="description"
                    placeholder="Description">
             <label for="description">Змінити опис</label>
             <h5 th:text="'Початкова ставка: ' + ${lot.getFirstRate()} + ' грн.'"></h5>
-            <input type="text" th:value="${lot.getFirstRate()}" id="firstRate" name="firstRate" placeholder="firstRate">
+            <input type="number" th:value="${lot.getFirstRate()}" id="firstRate" name="firstRate" placeholder="firstRate">
             <label for="firstRate">Змінити початкову ставку</label>
             <h5 th:text="'Поточна ставка: ' + ${lot.getRate()} + ' грн.'"></h5>
+            <input type="hidden" th:value="${lot.getIdOfLot()}" name="id">
             <button type="submit" class="btn btn-primary d-inline-flex align-items-center">Редагувати</button>
         </form>
         <br><br><br><br>

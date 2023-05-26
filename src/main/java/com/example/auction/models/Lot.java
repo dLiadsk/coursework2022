@@ -5,10 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Table(name = "Lots")
@@ -20,7 +17,7 @@ public class Lot {
     @JoinColumn
     private User user;
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "idOfLot")
     private Long idOfLot;
     @Column(name = "titleOfLot", nullable = false)
@@ -37,11 +34,6 @@ public class Lot {
     @Column(name = "active")
     private boolean active;
 
-
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "lot")
-    private List<Image> imageList = new ArrayList<>();
-    private Long previewImageId;
-
     private LocalDateTime dateAndTimeOfCreation;
 
     @PrePersist
@@ -49,8 +41,4 @@ public class Lot {
         dateAndTimeOfCreation = LocalDateTime.now();
     }
 
-    public void addImageToLot(Image image) {
-        image.setLot(this);
-        imageList.add(image);
-    }
 }

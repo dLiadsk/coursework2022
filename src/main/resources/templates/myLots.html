@@ -14,13 +14,14 @@
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
             <div class="col" th:if="${myLots}" th:each="lot : ${myLots}">
                 <div class="card shadow-sm text-bg-dark p-3">
-                    <img th:src="@{'/images/' + ${lot.getPreviewImageId()}}" alt="Image" width="100%"
+                    <img th:src="@{'/img/img.png'}" alt="Image" width="100%"
                          height="225"/>
                     <div class="card-body">
                         <h5 th:text="${lot.titleOfLot}"/>
-                        <h6 th:text="'Поточна ставка: ' + ${lot.firstRate}"/>
+                        <h6 th:if="${lot.isActive()}" th:text="'Поточна ставка: ' + ${lot.getRate()}"/>
+                        <h6 th:unless="${lot.isActive()}" th:text="'Лот неактивний'"></h6>
                         <a th:href="'/lot/' + ${lot.idOfLot}"
-                           class="btn btn-primary d-inline-flex align-items-center">Перейти до лоту</a>
+                           class="btn btn-primary d-inline-flex align-items-center">Перейти до лота</a>
                     </div>
                 </div>
             </div>

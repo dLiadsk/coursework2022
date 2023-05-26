@@ -9,12 +9,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 
-import java.io.IOException;
 import java.security.Principal;
 import java.util.Objects;
 
@@ -36,8 +33,8 @@ public class UserController {
     }
 
     @PostMapping("/sing_up")
-    public String singUp(@RequestParam(name = "avatarFile") MultipartFile avatarFile, User user, Model model, RedirectAttributes redirectAttributes) throws IOException {
-        if (!userService.crateUser(user, avatarFile)) {
+    public String singUp(User user, Model model, RedirectAttributes redirectAttributes) {
+        if (!userService.createUser(user)) {
             model.addAttribute("error", "Користувач з такою поштою вже існує.");
             return "sing_up";
         }

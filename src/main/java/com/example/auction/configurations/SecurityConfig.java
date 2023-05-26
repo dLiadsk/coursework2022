@@ -13,7 +13,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 
-
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
@@ -21,15 +20,16 @@ public class SecurityConfig {
     private final CustomUserDetailsService userDetailsService;
 
     @Bean
-    public static PasswordEncoder passwordEncoder(){
+    public static PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder(8);
     }
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf().disable()
                 .authorizeHttpRequests((authorize) ->
                         authorize.requestMatchers("/", "/sing_up", "/images/**", "/img/**", "/lot/**", "/user/**").permitAll()
-                                .requestMatchers("/lot/create", "/lot/makeRate/**", "/lot/edit/**", "/lot/activity/**", "/lot/delete/**", "/myLots", "myAccount").authenticated()
+                                .requestMatchers("/lot/create", "/lot/makeRate", "/lot/edit", "/lot/activity", "/lot/delete", "/myLots", "/myAccount").authenticated()
                 ).formLogin(
                         form -> form
                                 .loginPage("/login")

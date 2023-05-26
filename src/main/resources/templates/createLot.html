@@ -15,8 +15,13 @@
     <div class="container col-xl-10 col-xxl-8 px-4 py-5">
         <div class="row align-items-center g-lg-5 py-5">
             <div class="col-md-10 mx-auto col-lg-10">
+                <div th:if="${error != null and !error.isEmpty()}" class="alert alert-danger alert-dismissible fade show"
+                     role="alert">
+                    <strong th:text="${error}"></strong>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
                 <form class="p-4 p-md-5 border rounded-3 bg-body-tertiary text-bg-dark p-3  text-dark"
-                      action="/lot/create" method="post" enctype="multipart/form-data">
+                      action="/lot/create" method="post">
                     <div class="text-white"></div>
                     <div class="form-floating mb-3">
                         <input type="text" class="form-control" id="titleOfLot" placeholder="Назва лота"
@@ -30,20 +35,8 @@
                     </div>
                     <div class="form-floating mb-3">
                         <input type="number" class="form-control" id="firstRate" placeholder="Початкова ставка"
-                               name="firstRate">
+                               name="firstRate" value="0">
                         <label for="firstRate">Початкова ставка</label>
-                    </div>
-                    <div class="text-white">
-                        Додати фото до лота:
-                        <div class="form-floating mb-3" style="padding-left: 50px">
-                            <input type="file" id="file1" placeholder="Photo1" name="file1">
-                        </div>
-                        <div class="form-floating mb-3" style="padding-left: 50px">
-                            <input type="file" id="file2" placeholder="Photo2" name="file2">
-                        </div>
-                        <div class="form-floating mb-3" style="padding-left: 50px">
-                            <input type="file" id="file3" placeholder="Photo3" name="file3">
-                        </div>
                     </div>
                     <button class="w-100 btn btn-lg btn-primary" type="submit">Створити лот</button>
                 </form>
