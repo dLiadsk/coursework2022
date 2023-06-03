@@ -80,47 +80,60 @@ public class LotsController {
     }
 
     @PostMapping("/lot/makeRate")
-    public String makeNewRate(@RequestParam("id") long id, @RequestParam double newRate, @RequestParam long idOfWinner, RedirectAttributes redirectAttributes) {
+    public String makeNewRate(Principal principal, @RequestParam("id") long id, @RequestParam double newRate, @RequestParam long idOfWinner, RedirectAttributes redirectAttributes) {
         Lot lot = lotService.getLotById(id);
-        if (newRate > lot.getRate()) {
-            lotService.makeRate(newRate, lot, idOfWinner);
-            redirectAttributes.addFlashAttribute("success", "Ставка зроблена");
-        } else redirectAttributes.addFlashAttribute("error", "Ви не можете зробити ставку, нижчу ніж поточна");
+        if (!lotService.getUserByPrincipal(principal).getUserId().equals(lot.getUser().getUserId())){
+            if (newRate > lot.getRate()) {
+                lotService.makeRate(newRate, lot, idOfWinner);
+                redirectAttributes.addFlashAttribute("success", "Ставка зроблена");
+            } else redirectAttributes.addFlashAttribute("error", "Ви не можете зробити ставку, нижчу ніж поточна");
+        }
+        else redirectAttributes.addFlashAttribute("error", "Власник лота не може брати участь в аукціоні");
         return "redirect:/lot/" + id;
     }
 
     @GetMapping("/lot/edit")
-    public String toEditLot(Model model, @RequestParam long id) {
+    public String toEditLot(Principal principal, Model model, @RequestParam long id) {
         Lot lot = lotService.getLotById(id);
-        model.addAttribute("lot", lot);
-        return "edit";
+        if (lotService.getUserByPrincipal(principal).getUserId().equals(lot.getUser().getUserId())){
+            model.addAttribute("lot", lot);
+            return "edit";
+        }
+        return "redirect:/";
+
 
 
     }
 
     @PostMapping("/lot/edit")
-    public String editLot(RedirectAttributes redirectAttributes, @RequestParam long id, Lot lot) {
-        if (lot.getTitleOfLot().isEmpty()) {
-            redirectAttributes.addFlashAttribute("error", "Назва лота не може бути пустою");
+    public String editLot(RedirectAttributes redirectAttributes, @RequestParam long id, Lot lot, Principal principal) {
+        Lot mainLot = lotService.getLotById(id);
+        if (lotService.getUserByPrincipal(principal).getUserId().equals(mainLot.getUser().getUserId())) {
+            if (lot.getTitleOfLot().isEmpty()) {
+                redirectAttributes.addFlashAttribute("error", "Назва лота не може бути пустою");
+                return "redirect:/lot/" + id;
+            }
+            if (lot.getDescription().isEmpty()) {
+                redirectAttributes.addFlashAttribute("error", "Опис лота не може бути пустим");
+                return "redirect:/lot/" + id;
+            }
+            lotService.editLot(mainLot, lot);
+            redirectAttributes.addFlashAttribute("success", "Лот успішно змінено");
             return "redirect:/lot/" + id;
         }
-        if (lot.getDescription().isEmpty()) {
-            redirectAttributes.addFlashAttribute("error", "Опис лота не може бути пустим");
-            return "redirect:/lot/" + id;
-        }
-        lotService.editLot(lotService.getLotById(id), lot);
-        redirectAttributes.addFlashAttribute("success", "Лот успішно змінено");
-        return "redirect:/lot/" + id;
+        return "redirect:/";
     }
 
     @PostMapping("/lot/activity")
     public String startOrStopLot(Principal principal, @RequestParam long id, RedirectAttributes redirectAttributes) {
         Lot lot = lotService.getLotById(id);
-        lotService.setActivity(lot);
-        if (lot.isActive()) redirectAttributes.addFlashAttribute("success", "Торги розпочато");
-        else redirectAttributes.addFlashAttribute("success", "Торги зупинено");
-        return "redirect:/lot/" + id;
-
+        if (lotService.getUserByPrincipal(principal).getUserId().equals(lot.getUser().getUserId())){
+            lotService.setActivity(lot);
+            if (lot.isActive()) redirectAttributes.addFlashAttribute("success", "Торги розпочато");
+            else redirectAttributes.addFlashAttribute("success", "Торги зупинено");
+            return "redirect:/lot/" + id;
+        }
+        return "redirect:/";
     }
 
     @PostMapping("/lot/delete")

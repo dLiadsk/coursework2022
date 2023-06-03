@@ -8,13 +8,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 import java.security.Principal;
 import java.util.Comparator;
 import java.util.List;
 
 @Service
-@Slf4j
 @RequiredArgsConstructor
 public class LotService {
     private final LotRepository lotRepository;
@@ -23,7 +21,9 @@ public class LotService {
     public List<Lot> listOfLots(String keyWord) {
         if (keyWord != null) {
             List<Lot> lots = lotRepository.findByTitleOfLotContainingIgnoreCaseAndActive(keyWord, true);
-            lots.addAll(lotRepository.findByDescriptionContainingIgnoreCaseAndActive(keyWord, true));
+            for (Lot lot : lotRepository.findByDescriptionContainingIgnoreCaseAndActive(keyWord, true)){
+                if (!lots.contains(lot))lots.add(lot);
+            }
             return lots;
         }
         List<Lot> lots = lotRepository.findAllByActive(true);
